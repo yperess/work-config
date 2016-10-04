@@ -1,0 +1,4 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_1='/home/yperess/workspace/Companion/common/totem/src/main/cpp/api'
+let g:netrw_dirhist_2='/home/yperess/tools/gerrit-chrome-extension'
