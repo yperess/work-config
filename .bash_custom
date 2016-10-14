@@ -41,3 +41,34 @@ mkdir -p $CCACHE_DIR
 /usr/bin/ccache -M 20G
 export JAVA_HOME=`which java | xargs readlink -f | sed 's|/bin/java||'`
 export JUNIT_HOME=~/tools/junit/junit-4.10.jar
+
+function gstart() {
+  if [ -z "$1" ]; then
+    echo "Usage: $0 <branch_name> [remote]"
+    return 1
+  fi
+  git checkout -b $1
+  if [ $? -ne 0 ]; then
+    echo "Branch $1 already exists"
+    return 1
+  fi
+  if [ ! -z "$2" ]; then
+    remote="$2"
+  else
+    remote=`git remote`
+    if [ `echo $remote | wc -w` -ne 1 ]; then
+      echo "Ambiguous remote, found $remote"
+      echo "Usage: $0 <branch_name> [remote]"
+      git checkout develop
+      git branch -D $1
+      return 1
+    fi
+  fi
+  git push -u $remote $1
+  if [ $? -ne 0 ]; then
+    echo "Failed to set remote branch $remote/$1"
+    git checkout develop
+    git branch -D $1
+    return 1
+  fi
+}
